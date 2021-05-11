@@ -22,7 +22,7 @@
    
    除了常見的 keydown, click, change和input之外，transitionend是我第一次見到的監聽事件，可以用來監聽css特效，並在結束的當下觸發callback function。
 
-3.	Audio 標籤
+3. Audio 標籤
 
    Audio是html 有關聲音的標籤，以往撰寫的網頁大多沒有聲音的元素，所以也是第一次看到，使用到的語法有下列：
 
