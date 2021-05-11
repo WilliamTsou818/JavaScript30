@@ -29,5 +29,33 @@
    * play()：播放音檔
    * currentTime : 播放時間
 
+## Day 2 : JS and CSS Clock
+
+1. CSS transform
+   
+   transform 可賦予 html 元素旋轉、變形和平移等各式各樣的效果，今日的挑戰使用CSS 及 JS 實作一個時鐘，因此必須藉由 transform 旋轉作為指針的 html 元素。
+
+   * transform: rotate() : 可以旋轉該元素，括號內輸入 (角度 + deg) 作為參數
+
+   * transform-origin : 可以改變物件變化的起點，預設是物件的中心點，代入的參 
+                        數可以是 px, 百分比或方位。如果輸入兩個參數，前者代表 X 軸，後者代表 Y 軸
+
+2. transition-timing-function
+
+   這個屬性可用於設定動畫變化的速度，除了 linear, ease-in 及 ease-out 等語法外，本次的 CSS 時鐘採用了二階貝茲曲線 (cubic-bezier) 的方式去設定變化速度，要代入的參數為 (x1 , y1, x2, y2) 四個數值，其中的 x1, x2 必須是介於 0 ~ 1 之間的數值。
+
+   (事實上常見的 ease-in 等語法也是某個特定的 cubic-bezier 數值)
+
+3. JS 特殊物件 Date
+   
+   * 當我們使用 new Date() 創建一個 Date 物件時，如果沒有代入任何參數，就會指
+     向本地時間。
+   
+   * Date 物件也有許多內建方法，像是本次實作使用到的 getSeconds(), 
+     getMinutes() 及 getHours() 等內建方法，能夠取得目前的本地時間單位，如果想取得標準時間，則要在 get 及 時間單位中間加上 UTC 。
+
+
+
+
 
 
