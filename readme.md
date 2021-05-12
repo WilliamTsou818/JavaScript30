@@ -55,7 +55,41 @@
      getMinutes() 及 getHours() 等內建方法，能夠取得目前的本地時間單位，如果想取得標準時間，則要在 get 及 時間單位中間加上 UTC 。
 
 
+## Day 3 :  CSS Variables
 
+1. CSS Variables
+
+   * 藉由 var() 呼叫變數，可代入 name , value 兩種參數，前者為必備。
+
+     <code> var(--name, value) </code> 
+   
+   * 變數的命名前方須加上 --
+
+   * 通常會在 :root 命名變數，也可以在特定選擇器命名，在該選擇器呼叫變數時則會繼承
+     CSS 設定
+
+2. NodeList vs. Array
+
+   * NodeList != Array ， 兩者的原型鏈並不相同
+
+   * NodeList 包含部分 Array 的內建方法如 forEach ， 也可以用 index 值查詢特定
+     資料
+
+   * Array 可以新增、刪除陣列資料，NodeList 則無法。
+
+   * 使用 querySelectorAll() 回傳的是 NodeList
+
+3. Change vs. Input
+
+   * 在監聽事件中，change 會在偵測到元素的數值改變後，執行 callback function
+
+   * 在監聽事件中， input 會在偵測到有數值傳入即執行 callback function
+
+   * 如果想要在 slider 滑動時即時顯示畫面變化的效果，可以使用 input ， 或是像影片
+     中同時使用 mousemove 與 change
+
+   * 只有 change 的話，會在使用者停止滑動條與滑鼠點擊結束時，才會執行 callback 
+     function，所以無法即時呈現畫面變化
 
 
 
