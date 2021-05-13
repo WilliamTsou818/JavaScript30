@@ -91,5 +91,23 @@
    * 只有 change 的話，會在使用者停止滑動條與滑鼠點擊結束時，才會執行 callback 
      function，所以無法即時呈現畫面變化
 
+## Day 3 :  CSS Variables
+
+1. Array.from
+
+   * 將可迭代物件或類陣列 (nodeList) 轉化為陣列
+
+2. console.table
+
+   * 可將物件或陣列以表格的形式印出
+
+3. Array.sort([compareFunction(a, b)])
+
+   * 會依據 compareFunction(a, b) 的回傳值去排序 a 和 b
+
+   * 回傳值 > 0 會將 b 排在 a 前面；回傳值 < 0 會將 a 排在 b 前面
+
+4. 
+
 
 
