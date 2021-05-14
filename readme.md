@@ -91,7 +91,7 @@
    * 只有 change 的話，會在使用者停止滑動條與滑鼠點擊結束時，才會執行 callback 
      function，所以無法即時呈現畫面變化
 
-## Day 3 :  CSS Variables
+## Day 4 :  Array Cardio Day 1
 
 1. Array.from
 
@@ -107,7 +107,37 @@
 
    * 回傳值 > 0 會將 b 排在 a 前面；回傳值 < 0 會將 a 排在 b 前面
 
-4. 
+## Day 5 :  Flex Panel Gallery
+
+1. documentElement.classList.toggle('className')
+
+   * 可以偵測 html 元素是否已經有代入的 className 參數，如果有就去除，反之則加上
+
+2. CSS 選擇器
+
+   * className * : * 符號可以選擇所有的元素，通常會用於全域設定，也可以將它擺在某
+                   HTML 個元素後方，它就會選取該元素的所有子元素。 
+
+   * className > : > 符號被稱為「直屬選擇器」，它會選取該 HTML 元素的下一層子元
+                   素，如果是子元素的子元素就不會被選取，也可以和 * 搭配，用 className > * 的方式選取所有直屬子元素。
+   
+3. Flex
+
+   * Flex model 的屬性 flex 可以代入 1 ~ 3 個數值
+
+   * flex 代入 3 個數值時，由左至右分別代表 flex-grow, flex shrink 及 
+     flex-basis
+   
+   * flex-grow : 指定 flex model 剩餘的空間分配給各 flex items 的比例
+
+   * flex-shrink : 指定 flex items 的收縮比例
+
+   * flex-basis : 指定 flex items 在 flex model 中的初始大小
+
+   * flex 屬性只代入一個數值時，如果是無單位的數字，則會是 flex-grow 的值，且 
+     flex-shrink 預設為 1 ， flex-basis 預設為 0
+
+
 
 
 
