@@ -137,6 +137,31 @@
    * flex 屬性只代入一個數值時，如果是無單位的數字，則會是 flex-grow 的值，且 
      flex-shrink 預設為 1 ， flex-basis 預設為 0
 
+## Day 6 : Type Ahead
+
+1. Fetch()
+
+   * Fetch 是非同步請求技術 AJAX 的一種，在括號內輸入 URL 即可發出 HTML request
+
+   * 回傳的資料類型是 promise ， 可以用 .json() 去處理回傳的資料
+
+   * 可以再括號後方串接 .then() ，繼續處理回傳的 promise ， .then() 本身回傳的也是 
+     promise ， 目的是改善以往使用 callback 去處理非同步請求會導致 callback hell的問題，增加程式碼可讀性
+
+2. new RegExp() 
+
+   * 用於建立正規表達式的方法之一，括號內可以代兩個參數，分別是 Pattern 和 Flag
+
+   * Pattern 表示要選取的範圍，也可以輸入變數
+
+   * Flag 可以輸入 g (全域) 或 i (不分大小寫) 等設定，非必須
+
+3. String.replace()
+
+   * 可以將吻合的字串用其他內容代替，並且回傳新字串
+
+   * 括號內輸入兩個參數，分別是選取字串的條件範圍，以及用於替代的內容
+
 
 
 
