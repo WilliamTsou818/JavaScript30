@@ -162,6 +162,24 @@
 
    * 括號內輸入兩個參數，分別是選取字串的條件範圍，以及用於替代的內容
 
+## Day 7 : Array Cardio Day 2
+
+1. Array.some()
+
+   * 迭代陣列去尋找是否有資料符合條件值，只要有一個符合就回傳 true ，反之回傳 false
+
+2. Array.every()
+
+   * 和前述的 Array.some() 類似，但必須要全部陣列的資料都符合才回傳 true
+
+3. Array.find()
+
+   * 會回傳第一個符合條件的元素
+
+4. Array.findIndex()
+
+   * 會回傳第一個符合條件的元素 index 值
+
 
 
 
