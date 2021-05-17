@@ -180,6 +180,32 @@
 
    * 會回傳第一個符合條件的元素 index 值
 
+## Day 8 : Fun with HTML5 Canvas
+
+1. 定義 Canvas 畫布的範圍與形式
+
+   * const canvas = document.querySelector('#draw') → 選取畫布範圍
+   * const ctx = canvas.getContext('2d') → 將畫布設定為 2d 繪圖
+   * canvas.width = window.innerWidth → 將寬度定義為瀏覽器視窗寬度
+   * canvas.height = window.innerHeight → 將高度定義為瀏覽器視窗高度
+
+2. 定義顏色、線條與狀態
+
+   * ctx.stokeStyle → 線條顏色
+   * ctx.lineJoin → 線條相交點樣式
+   * ctx.lineCap → 線條結束點樣式
+   * ctx.lineWidth → 線條寬度
+   * let isDrawing = false → 繪圖狀態，false 為停止繪圖，true為正在繪圖
+
+3. 繪圖狀態、線條位置的參數
+
+   * ctx.beginPath() → 開始繪圖
+   * ctx.moveTo(lastX, lastY) → 繪圖起始點
+   * ctx.lineTo(event.offsetX, event.offsetY) → 繪圖終止點
+   * ctx.stroke() → 以定義路徑繪製
+   * [lastX, lastY] = [event.offsetX, event.offsetY] 
+     → 更新起始點，否則線條會從最初設定的起始點連線至滑鼠游標的位置，而不是跟著滑鼠游標
+
 
 
 
