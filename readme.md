@@ -206,6 +206,33 @@
    * [lastX, lastY] = [event.offsetX, event.offsetY] 
      → 更新起始點，否則線條會從最初設定的起始點連線至滑鼠游標的位置，而不是跟著滑鼠游標
 
+## Day 9 : Dev Tools Domination
+
+1. 跳出訊息
+
+   * console.warn() : 可用於跳出警告，在括號內輸入警告訊息
+   * console.error(): 可用於跳出錯誤，在括號內輸入錯誤訊息
+   * console.info() : 可用於跳出通知，在括號內輸入通知訊息
+
+2. 測試、Debug相關
+
+   * console.assert('測試條件', '錯誤訊息')： 如果未能通過測試條件，則回傳錯誤訊息
+
+   * console.count('a') : 計算傳入的參數共出現幾次
+
+   * console.time('a') / console.timeEnd('a') : 計算 time ~ timeEnd 之間耗費的時
+     間，可用於測試向伺服器或第三方API請求資料到回傳所耗費的時間
+
+3. 整理訊息
+
+   * console.group('a') / console.groupEnd('a') : 將 group ~ groupEnd 之間的訊息整
+     理為一組
+
+   * console.groupCollapsed('a') : 效果類似 group ， 差別在於預設為閉合的標籤，可避免
+     一組訊息過長，不好找到特定的那一欄標籤
+
+
+
 
 
 
