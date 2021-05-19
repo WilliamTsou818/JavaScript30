@@ -231,6 +231,38 @@
    * console.groupCollapsed('a') : 效果類似 group ， 差別在於預設為閉合的標籤，可避免
      一組訊息過長，不好找到特定的那一欄標籤
 
+## Day 10 : Hold Shift to Check Multiple Checkboxes
+
+今日的目標是實作出藉由按 shift 鍵一次選取多個 checkbox 的功能，類似 gmail 可以按 shift 一次選好幾個郵件的功能。
+
+1. event.shiftKey 
+
+   * 當監聽事件設置為 click 時， 事件就會出現 shiftKey 的選項來顯示是否有按 shift 鍵， 
+     以布林值表示，可以用來當作是否按下 shift 鍵的判斷條件
+
+2. 實作步驟概要
+
+   1. 用 querySelectorAll() 選取所有的 checkbox 節點
+
+   2. 替所有 checkbox 節點設置 click 事件監聽器，並代入要實現功能的函式
+
+   3. 在函式內、外分別用 let 宣告 inBetween 和 lastChecked 兩個變數，前者用布林值表示
+      是否在選取範圍內，後者則是儲存上一個被點選的 checkbox ，才能和現在點選的 checkbox 形成要選取的範圍
+   
+   4. 在函式最末端將 lastChecked 指定給目前點擊的 checkbox ，確保每一次點擊都會更新 
+      lastChecked 的值
+   
+   5. 在 if 條件中用 event.shiftKey 和 this.checked 來判斷是否有按下 shift 鍵以及
+      該 checkbox 是否已被勾選
+
+   6. 在 if 判斷式當中使用 forEach 再次迭代所有 checkbox 節點，並且再用一層 if 判斷式
+      去確認迭代的 checkbox 是否為目前點擊的對象，或是 lastChecked 的值，如果是就把 inBetween的值設為 true，下一次迭代到兩者中剩下的那一個值時，再把 inBetween 轉回 false，中間就會形成被選取的範圍了 (即 inBetween 值為 true 的所有 checkbox)
+   
+   7. 只要 inBetween 為 true 的 checkbox ，就替它的 checked 屬性加上 true 值來更改樣
+      式
+
+
+
 
 
 
