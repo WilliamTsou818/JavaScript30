@@ -262,6 +262,45 @@
       式
 
 
+   ## Day 11 : Custom Video Player
+
+   今天要藉由 JS 實作影片播放器的各項功能，包含播放暫停、調整音量速度、快轉和拉跩進度條等
+
+   1. 播放、暫停
+
+      * video.play()  : 播放
+      * video.pause() : 暫停
+
+      * 只要藉由 video.paused 去判斷目前影片狀態，再分別去執行上述兩者即可
+
+   2. 調整音量速度
+
+      * 透過 change, mousemove 去監聽音量速度條的變動
+      * 透過 this 去綁定觸發事件的元素，並將值代入影片相對應的屬性即可
+
+      <code>video[this.name] = this.value</code>
+
+   3. 快轉功能
+
+      * 透過 click 監聽事件去取得快轉按鈕的秒數 (dataset-skip)
+      * 將該值從字串轉化為數字後，加到目前影片時間的秒數即可
+
+      <code>const skip = this.dataset.skip</code>
+      <code>video.currentTime += parseFloat(skip)</code>
+
+   4. 進度條
+
+      * 進度條的顯示效果是藉由 flex-basis 的數值依據影片時間不斷疊加，直到 100%
+
+      <code>const percent = (video.currentTime / video.duration) * 100</code>
+      <code>progressBar.style.flexBasis = `${percent}%`</code>
+
+      * 如果想藉由點擊進度條來變動影片時間，則要取得點擊位置的 offsetX 座標並除以整個進
+        度條的寬度，乘以影片總時長後，將結果代入影片的目前時間
+
+      <code>const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration</code>
+      <code>video.currentTime = scrubTime</code>
+
 
 
 
