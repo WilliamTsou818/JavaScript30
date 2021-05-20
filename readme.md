@@ -285,20 +285,20 @@
       * 透過 click 監聽事件去取得快轉按鈕的秒數 (dataset-skip)
       * 將該值從字串轉化為數字後，加到目前影片時間的秒數即可
 
-      <code>const skip = this.dataset.skip
+      <code>const skip = this.dataset.skip<br>
       video.currentTime += parseFloat(skip)</code>
 
    4. 進度條
 
       * 進度條的顯示效果是藉由 flex-basis 的數值依據影片時間不斷疊加，直到 100%
 
-      <code>const percent = (video.currentTime / video.duration) * 100
+      <code>const percent = (video.currentTime / video.duration) * 100<br>
       progressBar.style.flexBasis = `${percent}%`</code>
 
       * 如果想藉由點擊進度條來變動影片時間，則要取得點擊位置的 offsetX 座標並除以整個進
         度條的寬度，乘以影片總時長後，將結果代入影片的目前時間
 
-      <code>const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration
+      <code>const scrubTime = (e.offsetX / progress.offsetWidth) * video.duration<br>
       video.currentTime = scrubTime</code>
 
 
