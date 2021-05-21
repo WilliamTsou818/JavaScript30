@@ -264,7 +264,7 @@
 
 ## Day 11 : Custom Video Player
 
-今天要藉由 JS 實作影片播放器的各項功能，包含播放暫停、調整音量速度、快轉和拉跩進度條等
+   今天要藉由 JS 實作影片播放器的各項功能，包含播放暫停、調整音量速度、快轉和拉跩進度條等
 
 1. 播放、暫停
 
@@ -307,6 +307,54 @@
    video.currentTime = scrubTime
    ```
 
+## Day 12 : Key Sequence Detection
+
+   本次的挑戰是要實作在網頁中輸入特定密碼後，會產生特殊效果的功能，因此需要設置監聽器偵測使用者輸入的按鍵，然後比對其輸入的內容是否和密碼相符，相符的話即產生效果。
+
+1. 監聽使用者輸入按鍵
+
+```
+window.addEventListener('keyup', (e) => {
+   console.log(e.key)
+})
+```
+
+   * keyup : 在按鍵放開的瞬間觸發
+   * e.key : 觸發事件的按鍵值
+
+2. 創建陣列儲存輸入的內容以及密碼
+
+```
+const pressed = []
+const secretCode = 'anivia'
+```
+
+3. 將輸入按鍵放進 pressed 裡，並且維持與密碼相同的長度
+
+```
+pressed.push(e.key)
+pressed.splice(-secretCode.length - 1, pressed.length - secretCode.length)
+```
+
+   * array.splice(start, deleteCount) : 
+     1. start 表示起始位置，負數的話則從末端開始
+     2. deleteCount 表示要刪除的數量，如果為負數則不刪除
+   
+   * -secretCode.length - 1 : 負號表示從末端開始，由於 - 1 不會刪除任何元素，所以 
+                              -secretCode.length (-6) 的後方要再 - 1 
+                     
+   * pressed.length - secretCode.length : 由於 deleteCount 為負數時不會刪除，所以這
+                                          樣的寫法可確保使用者輸入的內容超過密碼的長度時才開始刪除
+
+
+4. 與密碼對比，相符的話則呼叫特殊效果
+
+```
+if (pressed.join('').includes(secretCode)) {
+   console.log('DING DONG!)
+   cornify_add()
+}
+```
 
 
 
