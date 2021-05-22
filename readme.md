@@ -356,6 +356,58 @@ if (pressed.join('').includes(secretCode)) {
 }
 ```
 
+## Day 13 : Slide in on Scroll
+
+   本次實作的功能是滾動網頁卷軸時，網頁內容中的圖片會依據使用者的視窗位置，產生淡入的動畫效果。因此必須偵測目前的視窗位置和圖片的位置等數據，並搭配 if 來判斷何時該賦予圖片淡入的效果。
+
+1. 圖片淡入位置
+
+```
+const slideInAt = (window.scrollY + window.innerHeight) 
+   - slideImage.height / 2
+```
+
+   * window.scrollY : 視窗已經垂直滾動的像素值，以視窗頂部為基準
+   * window.innerHeight : 瀏覽器視窗的高度
+   * slideImage.height / 2 : 圖片高度的一半
+
+   * 由此希望圖片淡入的位置是滑到大約圖片高度一半的時候，所以先加上視窗高度讓偵測的基準點
+     變為視窗底部，再扣掉一半的圖片高度即可
+
+2. 圖片底部和視窗最頂部的距離
+
+```
+const imageBottom = slideImage.offsetTop + slideImage.height
+```
+
+   * slideImage.offsetTop : 圖片頂部和視窗最頂部的距離
+
+   * 再加上圖片本身的高度就等於圖片底部和視窗最頂部的距離
+
+3. 判斷已達到圖片淡入位置及目前視窗頂部是否已滑過圖片的最底部
+
+```
+const isHalfShown = slideInAt > slideImage.offsetTop
+const isNotScrolledPast = window.scrollY < imageBottom
+```
+
+   * slideInAt > slideImage.offsetTop : 只要圖片淡入位置大於圖片到視窗頂部的距離，即回
+                                        傳 true (表示已經滑到顯示圖片內容的位置)
+
+   * window.scrollY < imageBottom : 只要視窗頂部還沒滑過圖片底部的位置就回傳 true (表
+                                    示圖片依然在目前的視窗顯示範圍內)
+
+4. 代入 if 判斷式
+
+```
+if (isHalfShown && isNotScrolledPast) {
+   slideImage.classList.add('active')
+} else {
+   slideImage.classList.remove('active')
+}
+
+```
+
 
 
 
