@@ -408,7 +408,86 @@ if (isHalfShown && isNotScrolledPast) {
 
 ```
 
+## Day 14 : Object and Arrays: Reference vs Copy
 
+本次要講解的是物件與陣列的複製，以及一些需要釐清才能避開的坑點
+
+1. 陣列的複製
+
+```
+const players = ['Wes', 'Sarah', 'Ryan', 'Poppy']
+const team = players
+team[3] = 'Lux'
+
+console.log(team, players) // 皆為 ['Wes', 'Sarah', 'Ryan', 'Lux']
+```
+
+   * 由於陣列與物件皆是 Call by reference，因此 team 儲存的是指向原本儲存 players 陣列
+     的位址，並不是用另一個記憶體去儲存的新陣列。
+
+   * 因此對 team 的修改，也會直接影響到原本的 players 陣列
+
+```
+const team2 = players.slice()
+
+const team3 = [].concat(players)
+
+const team4 = [...players]
+
+const team5 = Array.from(players)
+```
+
+   * 以上四種方法都是會另外找一個記憶體位址儲存完整複製的新陣列，所以即使修改新陣列的內
+     容，也不會對原本的 players 陣列值產生影響
+
+   * .slice() 為輸入參數時會直接複製
+   * [].concat() 則是先創建空陣列，再用 .concat() 連接 players 陣列
+   * team4 則是使用到 ES6 的展開運算子
+   * Array.from() 可依據輸入的參數創建新陣列
+
+2. 物件的複製
+
+```
+const person = {
+   name: 'Wes Bos',
+   age: 80
+};
+
+const captain = person
+captain.number = 99
+
+console.log(person)
+```
+
+   * 如同陣列情形，因為物件也是 call by reference，所以原本的 person 物件也會跟著多一個
+     屬性 number ，以及值 99。
+
+```
+const wes = {
+   name: 'Wes',
+   age: 100,
+   social: {
+      twitter: '@wesbos',
+      facebook: 'wesbos.developer'
+   }
+}
+
+const dev = Object.assign({}, wes)
+dev.social.twitter = '@coolman'
+console.log(dev.social, wes.social) // twitter: '@coolman', facebook: 'wesbos.developer'
+```
+
+   * 另一種方法是用 Object.assign() 去複製新物件，但這個方法有個缺陷是它看似完整複製了
+     一個陣列，但只有第一層的屬性更改時不會影響到原本的物件，更下一層的其他屬性，依然會有call by reference 的現象，導致原本的物件一起更動
+
+```
+const dev2 = JSON.parse(JSON.stringify(wes))
+```
+
+   * 這個做法則可以避開上述的問題，是透過轉換 JSON 格式檔案的方式來達成
+   * 先藉由 JSON.stringify() 將物件轉換成網路傳輸資料用的 JSON 格式字串
+   * 再用 JSON.parse() 將該字串展開成 JS 物件，並且指定給新的變數，就等於是複製一個新物
+     件，且不會影響到原本物件
 
 
 
