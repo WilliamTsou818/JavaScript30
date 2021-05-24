@@ -490,6 +490,82 @@ const dev2 = JSON.parse(JSON.stringify(wes))
      件，且不會影響到原本物件
 
 
+## Day 15 : LocalStorage and Event Delegation
+
+<br>
+
+   今天要介紹的功能是 LocalStorage 和 Event Delegation
+
+ ### 1. LocalStorage
+
+ <br>
+
+   * 是一種將資料儲存在瀏覽器端的方式
+   * 限制大小為 5 MB
+   * 儲存方式為 key-value pair ，且資料型別為字串
+
+   ```
+   const items = JSON.parse(localStorage.getItem('items')) || []
+
+   function addItem(e) {
+     e.preventDefault()
+     const text = (this.querySelector('[name=item]')).value
+     const item = {
+       text,
+       done: false
+     }
+
+     items.push(item)
+     populateList(items, itemsList)
+     localStorage.setItem('items', JSON.stringify(items))
+     this.reset() 
+   }
+
+   addItems.addEventListener('submit', addItem)
+   ``` 
+   * JSON.parse() : 將從 localStorage 取得的資料展開成 JS 可以處理的物件或陣列
+
+   * JSON.stringify() : 將物件、陣列轉換成字串存進 localStorage，如果直接存入的話，
+                        localStorage 會使用 toString() 轉換，導致資料的內容跑掉
+
+   * localStorage.getItem('key') : 取得 localStorage 上儲存的資料
+
+   * localStorage.setItem('key', 'value') : 將資料存進 localStorage
+
+   * this.reset() : 清空輸入資料的表單
+
+   * e.preventDefault() : 取消 DOM 元素的預設效果，這邊是取消 submit 的網頁重新整理
+
+ ### 2. Event Delegation
+
+ <br>
+   
+   * 又稱作「事件委派」，由於 DOM 事件傳遞的冒泡與捕獲機制，在子元素觸發的事件也可以上傳
+     至父元素觸發，因此將事件監聽器設置在父元素，藉此監聽子元素的事件觸發，即是所謂的事件委派。
+
+   * 本次實作中，為了監聽每個列表元素是否有觸發點擊事件，因此直接在所有列表的父元素設立監
+     聽器，不但可以接受到往後新增的列表元素觸發的事件，也可以避免原本使用 querySelectorAll() 抓取 DOM 節點的方式，不慎抓取到不想監聽的 DOM 節點
+
+   ```
+   function toggleDone(e) {
+     if (!e.target.matches('input')) return
+     const el = e.target
+     const index = el.dataset.index
+     items[index].done = !items[index].done
+     localStorage.setItem('items', JSON.stringify(items))
+     populateList(items, itemsList)
+   }
+
+   itemsList.addEventListener('click', toggleDone)
+   ```
+
+   * e.target.matches('') : 確認觸發事件的節點是否包含特定屬性，回傳布林值
+
+   * 上述程式碼實際上要監聽的是每個 li 元素中的 input 元素，但監聽器統一設立在 ul 這一層
+     即可，否則每新增一個 li 就要新增一次監聽器非常的繁瑣。
+
+   
+
 
 
 
