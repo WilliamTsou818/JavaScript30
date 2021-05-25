@@ -565,7 +565,85 @@ const dev2 = JSON.parse(JSON.stringify(wes))
      即可，否則每新增一個 li 就要新增一次監聽器非常的繁瑣。
 
    
+## Day 16 : Mouse Move Shadow
 
+<br>
+
+   今天的目標是透過滑鼠移動的監聽事件，並且應用 offset 的相關屬性來達到動態文字殘影的效果。
+
+   另外，也會學到一些 this 和 DOM 元素綁定的細節，還有 ES6 解構賦值的語法
+
+<br>
+
+###  1. 建立監聽事件
+
+<br>
+
+```
+hero.addEventListener('mousemove', shadow)
+```
+
+###  2. 撰寫觸發殘影效果的函式
+
+<br>
+
+```
+function shadow(e) {
+    const { offsetWidth: width, offsetHeight: height } = hero
+    let { offsetX: x, offsetY: y } = e
+
+    if (this !== e.target) {
+      x = x + e.target.offsetLeft
+      y = y + e.target.offsetTop
+    }
+  }
+```
+
+   * 首先要取出 hero 元素的寬高，以及目前滑鼠游標的座標
+
+   * 這裡分別使用了解構賦值的語法，等號左邊宣告的物件內，key 表示等號右邊物件的屬性，
+     value 表示要指定給變數的名稱
+
+   * 如果屬性與要指定的變數名相同，也可以直接簡寫成 let {a, b} = object
+
+   * 由於滑鼠移到文字的 h1 內容時會無法正確顯示座標，所以要在指到 h1 時加上其原本的寬高
+     才能正確顯示座標
+
+   * 因為監聽事件綁定的是 hero 區塊，所以 this 會指向 div ，但 e.target 是指目前觸發
+     的 DOM 元素，所以當滑鼠游標移到 h1 時， e.target 就會變成 h1
+
+<br>
+
+```
+const walk = 100
+
+const xWalk = Math.round((x / width * walk) - (walk / 2))
+const yWalk = Math.round((y / height * walk) - (walk / 2))
+``` 
+
+   * Math.round() : 取到個位數
+   
+   * 藉由目前座標 (x, y) 除以總寬高 (width, height) 再乘以一個標準點 (walk)，最後扣除
+     標準點的一半，就可形成一個範圍，類似以前數學學到的四個象限那種感覺，而觸發效果的文字就是原點
+
+<br>
+
+```
+text.style.textShadow = `
+      ${xWalk}px ${yWalk}px 0 rgba(255, 0, 255, 0.7),
+      ${xWalk * -1}px ${yWalk}px 0 rgba(0, 255, 255, 0.7),
+      ${yWalk}px ${xWalk * -1}px 0 rgba(0, 255, 0, 0.7),
+      ${yWalk * -1}px ${xWalk}px 0 rgba(0, 0, 255, 0.7)
+    `
+```
+
+   * 最後再將座標代入到 text-shadow 的 CSS 屬性即可
+
+   * text-shadow 與 box-shadow 的參數組成一樣，分別代表 x軸, y軸, 模糊, 顏色
+
+   * 因為是直接在 JS 修改，所以要改為 JS 的命名方式 textShadow ， 而不是 CSS 的 
+     text-shadow
+   
 
 
 
