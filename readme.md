@@ -643,7 +643,85 @@ text.style.textShadow = `
 
    * 因為是直接在 JS 修改，所以要改為 JS 的命名方式 textShadow ， 而不是 CSS 的 
      text-shadow
+
+<br>
+<br>
+
+## Day 17 : Sort Without Articles
+
+<br>
+
+   今天的目標是依據字母順序來排序資料，並且要避免計算到特定字元
+
+   會學習到 .sort() / .replace() 的相關用法
+
+<br>
+
+###  1. 排序
+
+<br>
+
+```
+const sortedBands = bands.sort((a, b) => a > b ? 1 : -1)
+```
+
+   * 其實第四天的挑戰就已經學過 Array.sort() 的用法，不過我們還是來複習一下
+
+   * 除了數字以外，英文字母其實也可以依據順序來比較大小，較大者就是排序較後面的字母
+
+   * 如果 a 和 b 比較後回傳大於 0 的數字，就會將 b 排到 a 的前方，回傳小於 0 的數字則相
+     反
+
+   * 因為我們要按照 a - z 排序，因此當 a > b 時，表示 a 字母是順序比較後面的字母，所以
+     要回傳 1 讓 b 排到 a 的前面
+
+<br>
+
+###  2. 消除特定字元和空白
+
+<br>
    
+   為了不要計算到 A, An 和 The ，因此我們必須對進行比較的字串做處理，撰寫一個函式使用 Array.replace() 來處理字串，並在排序的時候套用
+
+<br>
+
+```
+function strip(bandName) {
+  return bandName.replace(/^(a |the |an )/i, '').trim()
+}
+
+const sortedBands = bands.sort((a, b) => strip(a) > strip(b) ? 1 : -1)
+```
+
+   * Array.replace() 中可以代入正規表達式去選取字串
+
+   * ^ : 字串開頭
+
+   * (a |the |an ) : 選取以這三個其中之一為開頭的字串，後方的空格是為了避免選取到其他非
+     目標的字串，例如同樣有 An 的 Anyway
+
+   * i : 表示不分大小寫皆選取
+
+   * .trim() : 去除空白
+
+   * 最後再將 bands.sort() 裡面的 a , b 代入 strip 函式處理後再比較即可
+
+<br>
+
+###  3. 顯示排序好的資料
+
+<br>
+
+```
+document.querySelector('#bands').innerHTML =
+  sortedBands
+    .map(band => `<li>${band}</li>`)
+    .join('')
+```
+
+   * 有個要注意的地方是，假設直接將內容代入 innerHTML ，瀏覽器會預設使用 toString() 來
+     轉換成字串，然而我們使用的資料形式為 Array ，會再轉換時於各元素之間加上逗號，導致多出來的逗號字元，所以要補上 .join('') 才能避免這種情況。
 
 
-
+<br>
+<br>
