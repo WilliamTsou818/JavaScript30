@@ -725,3 +725,65 @@ document.querySelector('#bands').innerHTML =
 
 <br>
 <br>
+
+## Day 18 : Adding Up Times with Reduce
+
+<br>
+
+   今天的目標是依據透過 Array.map() 與 Array.reduce() 計算所有影片的總時長
+
+<br>
+
+###  1. 擷取 data-time 並換算成秒數
+
+<br>
+
+```
+const timeNodes = document.querySelectorAll('[data-time]')
+  
+const seconds = Array.from(timeNodes)
+   .map(node => node.dataset.time)
+   .map(timeCode => {
+     const [mins, secs] = timeCode.split(':').map(parseFloat)
+     return (mins * 60) + secs
+   })
+```
+
+   * 先透過 querySelectorAll 選出所有包含 data-time 的節點
+
+   * 由於 querySelectorAll 會以類陣列的 nodeList 形式呈現，所以需要使用 Array.from 轉
+     換成純陣列後，才能使用陣列內建的函式
+
+   * 由於 data-time 本身是字串，所以使用 parseFloat 轉換為數字，才能進行計算
+
+<br>
+
+###  2. 利用 Array.reduce() 把所有影片的時長加總
+
+<br>
+
+```
+.reduce((total, vidSeconds) => total + vidSeconds)
+```
+
+   * 如果沒有輸入初始數值參數，就會自動以陣列的第一個元素作為初始值開始計算
+
+<br>
+
+###  3. 分別計算出小時、分鐘和秒數的單位
+
+<br>
+
+```
+let secondsLeft = seconds
+const hours = Math.floor(secondsLeft / 3600)
+secondsLeft = secondsLeft % 3600
+
+const mins = Math.floor(secondsLeft / 60)
+secondsLeft = secondsLeft % 60
+```
+
+   * 可以使用 % 取得餘數，並且記得在計算過程加上 Math.floor() 確保結果為整數
+
+<br>
+<br>
