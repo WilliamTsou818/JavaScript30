@@ -787,3 +787,96 @@ secondsLeft = secondsLeft % 60
 
 <br>
 <br>
+
+## Day 19 : Webcam Fun
+
+<br>
+
+   今天的目標是在網頁上透過 Canvas 顯示攝影鏡頭的畫面，並且增加下載截圖的功能
+
+<br>
+
+###  1. 擷取攝影鏡頭影像
+
+<br>
+
+```
+function getVideo() {
+  navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    .then(localMediaStream => {
+      
+      video.srcObject = localMediaStream
+      video.play()
+    })
+    .catch(err => console.error(`Oh no!!`, err))
+}
+```
+
+   * navigator.mediaDevices.getUserMedia : 詢問使用者是否許可攝影鏡頭，是的話就會回傳
+     一個參數
+
+   * 將回傳的參數 localMediaStream 傳入 video.srcObject，也就是我們在 HTML 建立的 
+     video 元素
+
+   * video.play() 播放畫面
+
+<br>
+
+###  2. 用 Canvas 畫布播放攝影鏡頭畫面
+
+<br>
+
+```
+function paintToCanvas() {
+  const width = video.videoWidth
+  const height = video.videoHeight
+  canvas.width = width
+  canvas.height = height
+
+  setInterval(() => {
+    ctx.drawImage(video, 0, 0, width, height)
+  }, 16)
+
+}
+```
+
+   * 將畫布的寬與高設定為和影片同高同寬，以免畫面比例產生變化
+
+   * 每16毫秒就截取一次鏡頭的畫面，並且渲染在 Canvas 畫布上
+
+   * ctx.drawImage(image, x, y, width, height) : 這五個參數分別代表圖片、畫布左上角
+     的原點座標(x, y軸)，渲染畫面的寬與高
+
+<br>
+
+###  3. 增加截圖下載的功能
+
+<br>
+
+```
+function takePhoto() {
+  snap.currentTime = 0
+  snap.play()
+
+  const data = canvas.toDataURL('image/jpeg')
+  const link = document.createElement('a')
+  link.href = data
+  link.setAttribute('download', 'handsome')
+  link.innerHTML = `<img src="${data}" alt="Handsome Man" />`
+  strip.insertBefore(link, strip.firstChild)
+}
+```
+
+   * 前面的 snap 是產生拍照快門聲的效果
+
+   * canvas.toDataURL() : 將畫面轉換成圖檔，形式為 URL
+
+   * 創建一個 HTML 元素，並將圖檔的 URL 指定給新產生的 HTML 元素
+
+   * 賦予該 HTML 元素可下載的屬性，並新增 img 元素，以截圖畫面顯示
+
+   * strip.insertBefore() : 將新擷取的圖片，以 strip 的 DOM 節點為父元素層，以其第一個
+     子元素為參考節點，再參考節點的前方插入新擷取的圖片
+
+<br>
+<br>
