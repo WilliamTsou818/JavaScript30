@@ -880,3 +880,79 @@ function takePhoto() {
 
 <br>
 <br>
+
+## Day 20 : Speech Detection
+
+<br>
+
+   今天的目標是透過瀏覽器的 Speech Recognition 來辨識麥克風輸入的語音，並且利用事件監聽和 DOM 元素的操作，將語音轉化成文字渲染在網頁上
+
+<br>
+
+###  1.  Speech Recognition 相關設定
+
+<br>
+
+```
+const recognition = new SpeechRecognition()
+recognition.interimResults = true
+recognition.start()
+```
+
+   * 先用關鍵字 new 創立一個 SpeechRecognition 實例
+
+   * recognition.start() 執行
+
+   * recognition.interimResults : 如果設定為 true ，則每一段音訊無論 isFinal 的值為
+     何，皆會回傳
+
+<br>
+
+###  2.  擷取音訊辨識後的文字並創建 HTML 元素
+
+<br>
+
+```
+recognition.addEventListener('result', e => {
+    const transcript = Array.from(e.results)
+      .map(result => result[0])
+      .map(result => result.transcript)
+      .join('')    
+  })
+
+recognition.addEventListener('end', recognition.start)
+```
+
+   * result 是 Speech Recognition 特有的事件，會在辨識完成且回傳結果後觸發
+
+   * 將事件的 results 轉換為陣列後，使用內建方法取出文字，再用 Array.join() 組成字串
+
+   * 由於辨識完畢後，就會關閉與 Speech Recognition 的連線，所以使用其內建的 end 事件偵
+     測到連線結束時，就會觸發再次啟動連線的程式，以便繼續辨識後續的音訊
+
+<br>
+
+```
+let p = document.createElement('p')
+const words = document.querySelector('.words')
+words.appendChild(p)
+
+p.textContent = transcript
+
+```
+
+   * 將組成的文字代入新創立的 HTML 段落元素的內容中，即可將麥克風音訊轉換成文字渲染於網頁
+     上
+
+<br>
+
+```
+if(e.results[0].isFinal) {
+   p = document.createElement('p')
+   words.appendChild(p)
+}
+```
+
+   * 由於新的辨識音訊內容會不斷覆蓋上一段音訊轉化成的文字，所以設立一個 if 判斷該音訊是否
+     為結尾值，如果是的話就新創立一個段落元素並且插入該節點，就能不斷新增新的文字段落，而不是一直覆蓋掉原本的段落
+
