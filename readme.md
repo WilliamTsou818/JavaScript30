@@ -956,3 +956,49 @@ if(e.results[0].isFinal) {
    * 由於新的辨識音訊內容會不斷覆蓋上一段音訊轉化成的文字，所以設立一個 if 判斷該音訊是否
      為結尾值，如果是的話就新創立一個段落元素並且插入該節點，就能不斷新增新的文字段落，而不是一直覆蓋掉原本的段落
 
+<br>
+<br>
+
+## Day 21 : Geolocation
+
+<br>
+
+   今天的目標是透過 Geolocation 這個 API 取得使用者目前的位置
+
+<br>
+
+###  1.   取得使用者位置
+
+<br>
+
+```
+navigator.geolocation.watchPosition(data => {
+   console.log(data)
+}, (error) => {
+   console.error(error)
+})
+```
+
+   * 透過 navigator 呼叫 geolocation 的功能
+
+   * watchPosition() : 會持續追蹤使用者的目前位置，一旦目標位置改變，就會回傳相關的資料
+                       物件
+
+<br>
+
+###  2.   取得使用者的移動速度與移動的方位
+
+<br>
+
+```
+speed.textContent = data.coords.speed
+arrow.style.transform = `rotate(${data.coords.heading}deg)`
+```
+
+   * coords.speed : 使用者的移動速度
+   * coords.heading : 使用者的移動方位角度
+
+   * 其他還有 latitude, longitude (經、緯度) 等不同屬性可以操作！
+
+<br>
+<br>
