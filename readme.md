@@ -1002,3 +1002,80 @@ arrow.style.transform = `rotate(${data.coords.heading}deg)`
 
 <br>
 <br>
+
+## Day 22 : Follow Along Link Highlighter
+
+<br>
+
+   今天的目標是透過 .getBoundingClientRect() 這個方法取得目標元素的位置資訊，再加上綁定事件監聽器，來達到連結聚光燈的特效。
+
+<br>
+
+###  1.   選取所有 link 元素並且設定監聽器
+
+<br>
+
+```
+const triggers = document.querySelectorAll('a')
+
+triggers.forEach(a => a.addEventListener('mouseenter', hightlightLink))
+```
+<br>
+
+   * mouseenter 事件為滑鼠游標移到目標元素時便會觸發。
+
+<br>
+
+###  2.   創立聚光燈效果的 HTML 元素
+
+<br>
+
+```
+const highlight = document.createElement('span')
+highlight.classList.add('highlight')
+document.body.append(highlight)
+```
+<br>
+
+   * 選擇用 span 創立是因為其預設為 inline 行內元素，要藉由 highlight 位置設定是 
+     absolute 這一點，才能透過之後使用 .getBoundingClientRect() 這個方法取得的位置數值來移動聚光燈特效的元素位置。
+
+<br>
+
+###  3.   撰寫事件監聽器的 callback function
+
+<br>
+
+```
+function hightlightLink() {
+   const linkCoords = this.getBoundingClientRect()
+   console.log(linkCoords)
+
+   const coords = {
+      width: linkCoords.width,
+      height: linkCoords.height,
+      left: linkCoords.left + window.scrollX,
+      top: linkCoords.top + window.scrollY  
+   }
+
+   highlight.style.width = `${coords.width}px`
+   highlight.style.height = `${coords.height}px`
+   highlight.style.transform = `translate(${coords.left}px, ${coords.top}px)`
+}
+```
+
+<br>
+
+   * 藉由 this 綁定觸發事件的 DOM 節點，並呼叫 .getBoundingClientRect()
+
+   * height, width 表示該元素的高與寬，left, top 表示該元素與瀏覽器畫面最左方、最上方
+     的距離
+
+   * 透過 scrollX, scrollY 處理畫面滾動造成的水平、垂直距離誤差值
+
+   * 將元素的 width, height 代入 highlight 效果，使大小一致
+
+   * 藉由 translate 的動畫效果，將聚光燈特效的位置移動到該元素在瀏覽器中的正確位置
+
+<br>
+<br>
