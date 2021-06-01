@@ -1079,3 +1079,124 @@ function hightlightLink() {
 
 <br>
 <br>
+
+## Day 23 : Speech Synthesis
+
+<br>
+
+   今天的目標是透過 Speech Synthesis 將輸入的文字轉換成音訊並播放，並且加上選擇語言的下拉式選單，以及基本的播放暫停鍵，還有調整語速、音調的滑動軸，實作出語音的效果。
+
+<br>
+
+###  1.   取得要輸入的文字資料，以及目前所有的語音選項
+
+<br>
+
+```
+const msg = new SpeechSynthesisUtterance()
+
+msg.text = document.querySelector('[name="text"]').value
+```
+
+   * msg 為 Speech Synthesis 的實例
+
+   * 替它的發音文字代入表單已經輸入的內容
+
+<br>
+
+```
+speechSynthesis.addEventListener('voiceschanged', populateVoices)
+
+function populateVoices() {
+   voices = this.getVoices()
+   voicesDropdown.innerHTML = voices
+     .map(voice => `<option value="${voice.name}">${voice.name} (${voice.lang})</option>`)
+     .join('')
+  }
+```
+
+<br>
+
+   * 藉由 voiceschanged 事件偵測語音選項的物件清單是否有改變
+
+   * .getVoices() 取得可使用的語音清單
+
+   * 藉由 Array.map() 將每個選項轉換為 HTML 格式，並代入下拉式選單的 DOM 節點
+
+<br>
+
+###  2.   依據選擇的語言，切換語音播放的語言
+
+<br>
+
+```
+voicesDropdown.addEventListener('change', setVoice)
+
+function setVoice() {
+   msg.voice = voices.find(voice => voice.name === this.value)
+   toggle()
+}
+```
+
+   * msg.voice 為語音發音的聲音物件
+
+<br>
+
+```
+function toggle(startOver = true) {
+   speechSynthesis.cancel()
+   if (startOver) {
+     speechSynthesis.speak(msg)
+   }
+}
+```
+
+<br>
+
+   * toggle 函式負責切換播放狀態
+
+   * speechSynthesis.cancel() 會暫停目前的語音播放
+
+   * speechSynthesis.speak(msg) 會依據代入的參數播放語音
+
+   * startOver 預設為 true ，表示每個觸發 toggle 函式的事件，都會將目前的音頻暫停，並
+     播放新的音頻，除了 stop 按鈕會在執行此函式時代入 startOver = false，使功能只限於暫停目前的音頻
+
+<br>
+
+###  3.   設定語速、音調的選項，以及播放暫停按鈕
+
+<br>
+
+```
+options.forEach(option => option.addEventListener('change', setOption))
+
+function setOption() {
+   msg[this.name] = this.value
+   toggle()
+}
+```
+
+<br>
+
+   * options 為語速、音調和語音文字的表單 DOM 節點
+
+   * 透過 change 事件，只要偵測到值改變，就執行 setOption()
+
+   * 將 msg 的屬性，依據觸發事件的名稱和值去更改，並且播放一次更改後的音頻
+
+<br>
+
+```
+speakButton.addEventListener('click', toggle)
+stopButton.addEventListener('click', () => toggle(false))
+```
+
+<br>
+
+   * 分別設定播放、執行鍵的監聽事件，並以 click 作為觸發事件
+
+   * 暫停鍵要代入 false 
+
+<br>
+<br>
