@@ -1200,3 +1200,91 @@ stopButton.addEventListener('click', () => toggle(false))
 
 <br>
 <br>
+
+## Day 24 : Sticky Nav
+
+<br>
+
+   今天的目標是透過 CSS 和 JS 寫出固定導覽列，當瀏覽器視窗的頂部接觸到導覽列的位置時，導覽列就會緊貼瀏覽器視窗的頂部，不會因為視窗的滾動而消失，當視窗往上移回導覽列原本的位置時，導覽列又會離開視窗頂部，回到原本的位置。
+
+<br>
+
+###  1.   選取導覽列的節點、導覽列與視窗頂部的距離及設置監聽器
+
+<br>
+
+```
+const nav = document.querySelector('#main')
+const topOfNav = nav.offsetTop
+
+window.addEventListener('scroll', fixNav)
+```
+<br>
+
+   * offsetTop : 該節點距離瀏覽器頂部的距離
+
+   * scroll : 一旦瀏覽器有捲動，即觸發事件
+
+<br>
+
+###  2.   撰寫 fixNav 函式
+
+<br>
+
+```
+function fixNav() {
+   if (window.scrollY >= topOfNav) {
+      document.body.style.paddingTop = nav.offsetHeight + 'px'
+      document.body.classList.add('fixed-nav')
+   } else {
+      document.body.style.paddingTop = 0
+      document.body.classList.remove('fixed-nav')
+   }
+}
+```
+
+<br>
+
+   * window.scrollY : 瀏覽器視窗滾動的垂直距離
+
+   * 一旦瀏覽器視窗滾動距離超過導覽列距離頂部的距離，即表示視窗頂部已經碰到導覽列
+
+   * 一旦視窗頂部碰觸到導覽列，就替 body 加上 CSS 屬性 fixex-nav ，反之則移除
+
+   * 由於導覽列改為固定於瀏覽器頂部時，原本佔據的空間會被釋放，因此藉由在 padding 加回
+     導覽列原本佔據的高度，避免視覺體驗不佳
+
+<br>
+
+###  3.   撰寫 fixed-nav 屬性
+
+<br>
+
+```
+.fixed-nav nav {
+  position: fixed;
+}
+
+li.logo {
+  max-width: 0;
+  overflow: hidden;
+  background: white;
+  transition: all .5s;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.fixed-nav li.logo {
+  max-width: 500px;
+}
+```
+
+<br>
+
+   * 如果觸發事件時，希望一口氣更動好幾個元素的特效，可以考慮把 CSS 屬性加在父元素，就可
+     以利用 CSS 選擇器分別賦予效果，例如本次的挑戰就將 fixed-nav 屬性加在 body ，而非導覽列本身
+
+   * logo 原本是隱藏的狀態，藉由 fixed-nav 屬性賦予其空間，就可以產生浮現的效果了
+
+<br>
+<br>
