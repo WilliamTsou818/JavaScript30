@@ -1288,3 +1288,103 @@ li.logo {
 
 <br>
 <br>
+
+## Day 25 : Event Capture, Propagation, Bubbling and Once
+
+<br>
+
+   今天的目標是更深入地了解 addEventListener 的參數設定，以及關於 DOM 事件觸發的詳細流程，也就是事件冒泡與事件捕獲
+
+<br>
+
+###  1.   選取節點並設立監聽器
+
+<br>
+
+```
+<div class="one">
+    <div class="two">
+      <div class="three">
+      </div>
+    </div>
+</div>
+```
+
+<br>
+
+```
+const divs = document.querySelectorAll('div')
+
+function logText(e) {
+    console.log(this.classList.value)
+  }
+
+divs.forEach(div => div.addEventListener('click', logText))
+```
+
+   * 在三層巢狀結構的 div 分別設立監聽器
+
+   * 觸發事件時，會印出該節點的 class name
+
+   * 點擊最底層時，會依序印出 three, two, one
+
+<br>
+
+###  2.   事件捕獲與事件冒泡機制
+
+<br>
+
+   依據上一部分的程式碼，為何點擊最底層會印出這樣的結果呢？原因就是所謂的瀏覽器事件捕獲與事件冒泡的機制。
+
+   當事件觸發時，瀏覽器會先依 document > html > ... > 觸發事件的 DOM 節點的路徑，也就是從最上層的根元素，一路遍歷至觸發事件的元素，這就是所謂的事件捕獲。
+
+   接著在目標節點觸發事件後，又會依循剛才的路徑逐層回到原本的根元素 document，這就是所謂的事件冒泡。
+
+   由於那三層 div 都設置有同樣的事件監聽器，因此在冒泡的過程中也會觸發事件，所以才會印出 three, two, one
+
+   然而剛才提到事件會先經過捕獲，那為何印出來的順序不是 one, two ,three, two, one 呢？原因是 addEventListener 預設是採用 bubbling，也就是所謂的事件冒泡，因此如果在監聽器加入第三個參數，如下：
+
+<br>
+
+```
+divs.forEach(div => div.addEventListener('click', logText, { capture: true }))
+```
+
+<br>
+
+   * 這樣一來，監聽器就會改為事件捕獲，印出 one, two, three 了
+
+<br>
+
+###  3.   Propagation and Once
+
+<br>
+
+  那如果今天好幾層元素都有相同的事件監聽器，但我只希望觸發目標節點的事件呢？
+
+<br>
+
+```
+e.stopPropagation()
+```
+
+<br>
+
+   * 只要加入上述程式碼，就會在觸發事件後停止後續的冒泡或捕獲行為了
+
+<br>
+
+  如果我今天希望監聽事件只觸發一次後就移除呢？
+
+<br>
+
+```
+divs.forEach(div => div.addEventListener('click', logText, { once: true }))
+```
+
+<br>
+
+   * 只要在監聽器的參數加上 Once ，並且設為 true，就會在觸發事件後移除監聽器了
+
+<br>
+<br>
