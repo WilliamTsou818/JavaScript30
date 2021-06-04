@@ -1388,3 +1388,118 @@ divs.forEach(div => div.addEventListener('click', logText, { once: true }))
 
 <br>
 <br>
+
+## Day 26 : Stripe Follow Along Nav
+
+<br>
+
+   今天的目標是延伸第22天挑戰的聚光燈效果，實作出可以依據使用者游標的位置，自行下拉顯示出導覽列內容的效果，一樣需要搭配 .getBoundingClientRect() 取得目標位置來做相應的處理。
+
+<br>
+
+###  1.   選取節點並設立監聽器
+
+<br>
+
+```
+const triggers = document.querySelectorAll('.cool > li')
+const background = document.querySelector('.dropdownBackground')
+const nav = document.querySelector('.top')
+
+triggers.forEach(trigger => trigger.addEventListener('mouseenter', handleEnter))
+triggers.forEach(trigger => trigger.addEventListener('mouseleave', handleLeave))
+```
+
+<br>
+
+   * 使用 mouseenter 和 mouseleave 兩個事件，分別處理游標移到事件目標和移出事件目標後
+     執行的程式
+
+<br>
+
+###  2.   處理游標移入事件目標的函式
+
+<br>
+
+```
+function handleEnter() {
+   this.classList.add('trigger-enter')
+   setTimeout(() => {
+      if (this.classList.contains('trigger-enter')) {
+        this.classList.add('trigger-enter-active')
+      } 
+   }, 150)
+   background.classList.add('open')
+}
+```
+
+<br>
+
+   * 替觸發事件的導覽列目標加上相應的 class name 
+
+   * 顯示下拉式內容的背景樣式
+
+<br>
+
+```
+const dropdown = this.querySelector('.dropdown')
+const dropdownCoords = dropdown.getBoundingClientRect()
+const navCoords = nav.getBoundingClientRect()
+
+const coords = {
+   height: dropdownCoords.height,
+   width: dropdownCoords.width,
+   top: dropdownCoords.top - navCoords.top,
+   left: dropdownCoords.left - navCoords.left
+}
+```
+
+<br>
+
+   * 呼叫 .getBoundingClientRect() 取得導覽列和下拉式內容的座標
+   * 將座標資訊儲存於 coords 物件中
+   * 高、寬等於下拉式內容的高、寬
+
+   * 由於下拉式內容的背景是以 position: absolute 的方式綁定其父元素 nav 來定位，如果直
+     接依照距離瀏覽器最上方、最左方的距離來代入 CSS 屬性的數值，而其父元素 nav 上方又有其他含有內容的元素，就會導致位置偏離 
+     
+     (因為 absolute 是從父元素 nav 的頂部開始計算，而不是瀏覽器頂部)
+
+   * 因此，下拉式內容的 top, left 數值還必須要扣除導覽列本身的 top, left 數值，才會是
+     準確的座標參數
+
+<br>
+
+```
+background.style.setProperty('width', `${coords.width}px`)
+background.style.setProperty('height', `${coords.height}px`)
+background.style.setProperty('transform', `translate(${coords.left}px, ${coords.top}px)`)
+```
+
+<br>
+
+   * 將上述的座標參數代入相對應的 CSS 屬性
+
+   * 下拉式內容的背景高、寬要符合內容本身的高、寬
+
+   * 透過 translate 移動背景，使其符合內容顯示的位置，移動的座標等於 left, top 數值
+
+<br>
+
+###  3.   處理游標移出事件目標的函式
+
+<br>
+
+```
+function handleLeave() {
+   this.classList.remove('trigger-enter', 'trigger-enter-active')
+   background.classList.remove('open')
+}
+```
+
+<br>
+
+   * 移出事件的處理較為單純，將背景、內容的相關 class name 移除即可
+
+<br>
+<br>
