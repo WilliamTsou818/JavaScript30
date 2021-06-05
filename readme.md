@@ -1503,3 +1503,106 @@ function handleLeave() {
 
 <br>
 <br>
+
+## Day 27 : Click and Drag
+
+<br>
+
+   今天的目標是實作出可以用滑鼠拖曳，讓網頁元素水平滾動的效果。
+
+<br>
+
+###  1.   選取節點、設立監聽器和相關參數
+
+<br>
+
+```
+const slider = document.querySelector('.items')
+let isDown = false
+let startX
+let scrollLeft
+
+slider.addEventListener('mousedown', () => {})
+slider.addEventListener('mouseleave', () => {})
+slider.addEventListener('mouseup', () => {})
+slider.addEventListener('mousemove', () => {})
+```
+
+<br>
+
+   * 選取要滑動的元素節點
+   * isDown 參數代表目前是否處於拖曳中的狀態
+   * StartX 參數代表滑鼠拖曳的起始點擊處
+   * scrollLeft 參數代表水平拖曳的距離，用於改變元素的位置
+
+<br>
+
+   * 設立四個事件監聽器，分別監聽滑鼠點擊、游標離開元素、滑鼠放開和游標在元素內移動
+
+<br>
+
+###  2.   處理監聽器的事件觸發行為
+
+<br>
+
+  因為我們希望的效果是滑鼠按壓的時候拖曳，因此滑鼠點擊的時候要進入拖曳狀態，而滑鼠放開、移出元素區域時必須要結束拖曳狀態，在元素內移動時則要處理拖曳的距離和效果。
+
+<br>
+
+```
+slider.addEventListener('mousedown', (e) => {
+   isDown = true
+   slider.classList.add('active')
+   startX = e.pageX - slider.offsetLeft
+   scrollLeft = slider.scrollLeft
+  })
+```
+
+<br>
+
+   * 滑鼠點擊時，將 isDown 改為 true 並賦予 active 的 CSS 樣式，表示進入可拖曳狀態
+
+   * 計算點擊位置 startX，必須要先計算出在瀏覽器視窗的座標 e.pageX，再扣除 slider 元素
+     距離瀏覽器最左方的距離，才是滑鼠點擊位置在 slider 元素內的正確座標
+
+   * slider.scrollLeft 表示該元素的左邊界與瀏覽器的左邊界之間的距離，待會要藉由改變這
+     個參數來實現滾動效果
+
+<br>
+
+```
+slider.addEventListener('mouseleave', () => {
+   isDown = false
+   slider.classList.remove('active')
+})
+
+slider.addEventListener('mouseup', () => {
+   isDown = false
+   slider.classList.remove('active')
+})
+```
+
+<br>
+
+   * mouseleave, mouseup 的事件較為單純，只要將 isDown 改回 false 並移除 active 的 
+     CSS 樣式即可，表示脫離可拖曳狀態
+
+<br>
+
+```
+slider.addEventListener('mousemove', (e) => {
+   if(!isDown) return
+   e.preventDefault()
+   const x = e.pageX - slider.offsetLeft
+   const walk = (x - startX) * 2
+   slider.scrollLeft =  scrollLeft - walk
+})
+```
+
+<br>
+
+   * 先判斷 isDown 是否為 true，並且阻擋瀏覽器的預設行為
+   * 每次移動都要即時計算目前滑鼠的座標，儲存在變數 x 
+   * 每次移動都要即時計算目前滑鼠的座標扣除最初滑鼠點擊時的座標距離，儲存於變數 walk，如
+     果比原始點擊點左邊，就會是負數，反之則為正數
+   * 將 slider.scrollLeft 扣除移動的距離，就會產生拖曳移動的效果了
