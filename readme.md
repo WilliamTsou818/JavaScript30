@@ -1606,3 +1606,76 @@ slider.addEventListener('mousemove', (e) => {
    * 每次移動都要即時計算目前滑鼠的座標扣除最初滑鼠點擊時的座標距離，儲存於變數 walk，如
      果比原始點擊點左邊，就會是負數，反之則為正數
    * 將 slider.scrollLeft 扣除移動的距離，就會產生拖曳移動的效果了
+
+<br>
+<br>
+
+## Day 28 : Video Speed Controller
+
+<br>
+
+   今天的目標是實作出可以改變影片播放速度的速度條。
+
+<br>
+
+###  1.   選取節點、設立監聽器
+
+<br>
+
+```
+const speed = document.querySelector('.speed')
+const bar = speed.querySelector('.speed-bar')
+const video = document.querySelector('.flex')
+
+speed.addEventListener('mousemove', handleMove)
+```
+<br>
+
+   * 分別擷取影片、速度條的節點
+   * 在速度條設立監聽器，監聽滑鼠移動的事件，並使用函式 handleMove 處理事件
+
+<br>
+
+###  2.   撰寫函式處理速度條
+
+<br>
+
+```
+const y = e.pageY - this.offsetTop
+const percent = y / this.offsetHeight
+const min = 0.4
+const max = 4
+const height = Math.round(percent * 100) + '%'
+const playbackRate = percent * (max - min) + min
+```
+
+<br>
+
+   * 透過 e.pageY (滑鼠點擊處的 Y 座標) 扣除 this.offsetTop (速度條距離瀏覽器最上方)
+     計算出目前點擊位置和速度條最上方的距離
+   
+   * 將 y 除以整個速度條的高度，即可算出百分比
+
+   * 設立變數儲存影片播放速度的最大值和最小值
+
+   * 用 Math.round 處理百分比，並儲存在 height 參數中，用於即時顯示目前速度條的高度
+
+   * 利用百分比計算出目前的影片播放速度，儲存於 playbackRate 中
+
+<br>
+
+```
+bar.style.height = height
+bar.textContent = playbackRate.toFixed(2) + 'x'
+video.playbackRate = playbackRate
+```
+<br>
+
+   * 將前面計算出的高度代入速度條的高度屬性
+
+   * 將顯示文字替換為目前的影片播放速度，利用 toFixed(2) 將速度顯示至小數點後第二位
+
+   * 將播放速度的參數代入選取的影片節點，就大功告成囉～！
+
+<br>
+<br>
