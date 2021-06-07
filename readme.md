@@ -1679,3 +1679,123 @@ video.playbackRate = playbackRate
 
 <br>
 <br>
+
+## Day 29 : Countdown Timer
+
+<br>
+
+   今天的目標是實作網頁倒數計時器。
+
+<br>
+
+###  1.   倒數時間的計時器函式
+
+<br>
+
+```
+function timer(seconds) {
+  // clear any existing timers
+  clearInterval(countdown)
+
+  const now = Date.now()
+  const then = now + seconds * 1000
+  displayTimeLeft(seconds)
+  displayEndTime(then)
+
+  countdown = setInterval(() => {
+    const secondsLeft = Math.round((then - Date.now()) / 1000)
+    if(secondsLeft <= 0) {
+      clearInterval(countdown)
+      return
+    }
+    displayTimeLeft(secondsLeft)
+  }, 1000)
+}
+```
+<br>
+
+   * 建立 timer 函式並且傳入秒數作為參數
+
+   * 使用 Date.now() 取得目前的時間戳記，儲存於 now
+
+   * 加上輸入的秒數，取得倒數完畢後的時間，儲存於 then 
+
+   * 將輸入的秒數作為參數，傳入 displayTimeLeft() 函式顯示剩餘時間
+
+   * 將 then 傳入 displayEndTime() 函式顯示倒數結束的時間點
+
+   * 透過 setInterval()，並且輸入 1000毫秒，表示每隔一秒執行一次 setInterval() 內的程
+     式碼，每次執行的程式為顯示剩餘時間的函式，就可以達到倒數的效果
+
+   * 另外，如果剩餘時間的秒數小於等於 0 ，就要使用 clearInterval() 並且代入 
+     setInterval() 所指定的變數名稱，才可以清除 setInterval()
+
+<br>
+
+```
+function displayTimeLeft(seconds) {
+  const minutes = Math.floor(seconds / 60)
+  const remainderSeconds = seconds % 60
+  const display = `${minutes}: ${remainderSeconds < 10 ? '0' : ''}${remainderSeconds}`
+  document.title = display
+  timerDisplay.textContent = display
+}
+```
+
+<br>
+
+   * 透過除以 60 和除以 60 後的餘數，來取得分鐘與秒數的資訊
+
+   * 將分鐘與秒數的資訊透過 template literals 結合，並且代入至 HTML 中顯示剩餘時間的元
+     素內容
+
+   * 透過三元運算子來判斷秒數是否小於 10 秒，如果是則前面加上一個 0 ，以維持版面
+
+<br>
+
+```
+function displayEndTime(timestamp) {
+  const end = new Date(timestamp)
+  const hour = end.getHours()
+  const minutes = end.getMinutes()
+  endTime.textContent = `Be Back At ${hour}:${minutes < 10 ? '0' : ''}${minutes}`
+}
+```
+<br>
+
+   * 此函式必須傳入 Unix 時間戳作為參數，而 now 和 then 變數所儲存的值皆為 Unix 時間戳
+
+   * 將 Unix 時間戳代入 new Date() ，就會傳回目前的時間戳記
+
+   * 分別使用 getHours(), getMinutes() 取得目前時間的小時和分鐘數，並帶入顯示倒數結束
+     時間的 HTML 元素
+
+<br>
+
+###  2.   設立監聽器和啟動倒數的函式
+
+<br>
+
+```
+function startTimer() {
+  const seconds = parseInt(this.dataset.time)
+  timer(seconds)
+}
+
+buttons.forEach(button => button.addEventListener('click', startTimer))
+document.customForm.addEventListener('submit', function(e) {
+  e.preventDefault()
+  const mins = this.minutes.value
+  timer(mins * 60)
+  this.reset()
+})
+```
+
+<br>
+
+   * 替每個按鈕設立監聽器，並且取得該按鈕的秒數值，作為參數代入 timer 函式啟動倒數
+
+   * 替輸入分鐘數的表單設立監聽器，先預防瀏覽器預設行為，並且將取得的值轉換為秒數代入 
+     timer，啟動倒數即可
+
+
