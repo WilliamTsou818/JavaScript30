@@ -1798,4 +1798,153 @@ document.customForm.addEventListener('submit', function(e) {
    * 替輸入分鐘數的表單設立監聽器，先預防瀏覽器預設行為，並且將取得的值轉換為秒數代入 
      timer，啟動倒數即可
 
+<br>
+<br>
 
+## Day 30 : Whack A Mole
+
+<br>
+
+   今天的目標是實作網頁打地鼠遊戲，我們會使用到 setTimeOut() 去處理計時相關的程式碼，例如地鼠跳出來後，維持多久才會回到地洞。
+
+<br>
+
+###  1.   設立遊戲相關的參數和 DOM 節點
+
+<br>
+
+```
+const holes = document.querySelectorAll('.hole');
+const scoreBoard = document.querySelector('.score');
+const moles = document.querySelectorAll('.mole');
+let lastHole
+let timeUp = false
+let score = 0
+```
+<br>
+
+   * 為了不讓地鼠連續從同一個洞出現，所以設立 lastHole 參數儲存上一次出現的地洞
+
+   * 依據 timeUp 參數的布林值判斷目前的遊戲狀態
+
+   * score 儲存目前的分數
+
+<br>
+
+###  2.   處理隨機時間與隨機地洞的函式
+
+<br>
+
+```
+function randomTime(min, max) {
+   return Math.round(Math.random() * (max - min) + min)
+}
+```
+
+   * 這項函式回傳的單位為毫秒，用於傳入後續的 setTimeOut() 時間參數，決定地鼠出現的持續
+     時間
+
+   * 函式要傳入的單位也是毫秒，會隨機在 min ~ max 的區間內抽出一個數字做為結果回傳
+
+<br>
+
+```
+function randomHoles(holes) {
+   const idx = Math.floor(Math.random() * holes.length)
+   const hole = holes[idx]
+   if (hole === lastHole) {
+      return randomHoles(holes)
+   }
+   lastHole = hole
+   return hole
+}
+```
+
+<br>
+
+   * 隨機選擇跳出的地洞，由於地洞的 DOM 節點以 nodeList 呈現，所以要先隨機抽出 index 
+     值，並代入該 nodeList 中抽出地洞
+
+   * 加入 if 判斷抽中的地洞是否和上一次抽中的地洞相同，如果相同則再次呼叫本函式
+
+   * 將這次抽中的地洞儲存至 lastHole 參數
+
+   * 回傳本次抽中的地洞
+
+<br>
+
+###  3.   處理地鼠冒出與被敲打動作的函式
+
+<br>
+
+```
+function peep() {
+   const time = randomTime(400, 1000)
+   const hole = randomHoles(holes)
+   hole.classList.add('up')
+   setTimeout(() => {
+      hole.classList.remove('up')
+      if (!timeUp) peep()
+   }, time)
+}
+```
+
+<br>
+
+   * 將 randomTime 函式回傳的時間代入 time 
+   * 將 randomHoles 函式回傳的地洞代入 hole
+   * 替被選中的地洞加上 up 的 class name，產生地鼠冒出的效果
+   * 透過 setTimeOut() 並輸入 time 參數，表示到該時間後，就執行 setTimeOut() 內的程式
+     碼，移除地洞的 class name，讓地鼠回到地洞，並且再次呼叫 peep() ，選出下一個冒出地鼠的地洞
+
+<br>
+
+```
+function bonk(e) {
+   if (!e.isTrusted) return
+   score++
+   this.classList.remove('up')
+   scoreBoard.textContent = score
+}
+
+moles.forEach(mole => mole.addEventListener('click', bonk))
+```
+
+<br>
+
+   * 替每個地鼠加上點擊事件監聽器
+
+   * e.isTrusted 為布林值，如果該事件觸發時是因為使用者的操作，則該值為 true，因此不
+     是 true 的時候就停止執行函式，以確保該函式執行的狀態是因為使用者正確點擊到了地鼠
+
+   * 增加分數
+
+   * 移除 up ，使地鼠回到地洞
+
+   * 修改計分板顯示的分數
+
+<br>
+
+###  4.   處理開始遊戲的函式
+
+<br>
+
+```
+function startGame() {
+   scoreBoard.textContent = 0
+   score = 0
+   timeUp = false
+   peep()
+   setTimeout(() => timeUp = true, 5000)
+}
+```
+<br>
+
+   * 歸零計分板和分數
+
+   * 將 timeUp 改回 false
+
+   * 執行 peep()，開始冒出地鼠
+
+   * 透過 setTimeOut() 並代入自訂的遊戲參數，時間一到就將 timeUp 設為 true，讓 peep
+     () 函式停止執行，地鼠便會停止冒出
